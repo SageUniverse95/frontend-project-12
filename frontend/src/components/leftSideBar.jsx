@@ -1,12 +1,28 @@
 import { Button } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { channelsSelect } from '../slices/channelSlice';
 
 const LeftSideBar = () => {
-  const ttt = 123;
+  const activeChannelID = useSelector((state) => state.channels.currentChannelID);
+  const channels = useSelector(channelsSelect.selectAll)
+    .map(({ name, id }) => (
+      <li className="nav-item w-100" key={id}>
+        <Button
+          type="button"
+          className="w-100 text-start rounded-0"
+          variant={activeChannelID === id ? 'secondary' : null}
+        >
+          <span className="me-1">{`# ${name}`}</span>
+
+        </Button>
+      </li>
+    ));
+
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>Каналы</b>
-        <Button type="button" className="text-primary" variant="group-vertical">
+        <Button type="button" className="text-primary p-0" variant="group-vertical">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -21,9 +37,7 @@ const LeftSideBar = () => {
         </Button>
       </div>
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
-        <li className="nav-item w-100">
-          <Button type="button" className="w-100 text-start" variant="secondary">test</Button>
-        </li>
+        {channels}
       </ul>
     </div>
   );
