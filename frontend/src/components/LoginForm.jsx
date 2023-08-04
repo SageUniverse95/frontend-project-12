@@ -7,11 +7,11 @@ import {
 /* import * as Yup from 'yup'; */
 import { useNavigate } from 'react-router-dom';
 import routes from '../routes';
-import AuthContext from '../context/auth.context';
+import AppContext from '../context/app.context.js';
 
 const LoginForm = () => {
   const [isFailAuth, setAuthFailed] = useState(false);
-  const { logIn } = useContext(AuthContext);
+  const { logIn } = useContext(AppContext);
   const inputWithLogin = useRef();
   const navigate = useNavigate();
   const formik = useFormik({

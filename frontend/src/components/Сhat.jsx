@@ -1,11 +1,12 @@
 import { Button, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import routes from '../routes';
 import { addChanels, addCurrentId } from '../slices/channelSlice.js';
-import { addMessages } from '../slices/messageSlice.js';
+import { addMessages, messageSelect } from '../slices/messageSlice.js';
+import AppContext from '../context/app.context';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -18,22 +19,10 @@ const getAuthHeader = () => {
 };
 
 const Chat = () => {
-  const nameOfChannel = useSelector((state) => {
-    const { currentChannelId, entities } = state.channels;
-    const result = entities[currentChannelId].name;
-    return result;
-  });
-
+  const { socketApi } = useContext(AppContext);
+  socketApi.subscribeOnMessage();
   const dispatch = useDispatch();
-  const formik = useFormik({
-    initialValues: {
-      message: '',
-    },
-    onSubmit: async (values) => {
-      console.log(values);
-    },
-  });
-
+  const currentIDChannel = useSelector((state) => state.channels.currentChannelID);
   useEffect(() => {
     const getData = async () => {
       const resp = await axios.get(routes.getDataPath(), { headers: getAuthHeader() });
@@ -47,16 +36,50 @@ const Chat = () => {
     getData();
   }, []);
 
+  const nameOfChannel = useSelector((state) => {
+    const { entities } = state.channels;
+    const result = entities[currentIDChannel]?.name;
+    return result;
+  });
+
+  const messages = useSelector(messageSelect.selectAll)
+    .filter(({ channelId }) => channelId === currentIDChannel)
+    .map(({ body, username, id }) => (
+      <div className="text-break mb-2" key={id}>
+        <b>{username}</b>
+        {': '}
+        {body}
+      </div>
+    ));
+
+  const formik = useFormik({
+    initialValues: {
+      message: '',
+    },
+    onSubmit: async (values) => {
+      const userName = JSON.parse(localStorage.getItem('userId')).username;
+      const data = { body: values.message, channelId: currentIDChannel, username: userName };
+      const test = await socketApi.addNewMessage(data);
+      console.log(test);
+    },
+  });
+
   return (
     <div className="col p-0 h-100">
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b>{`# ${nameOfChannel}`}</b>
+            <b>
+              #
+              {' '}
+              {nameOfChannel || null}
+            </b>
           </p>
           <span className="text-muted">mnogo bukov</span>
         </div>
-        <div id="messages-box" className="chat-messages overflow-auto px-5 " />
+        <div id="messages-box" className="chat-messages overflow-auto px-5 ">
+          {messages || null}
+        </div>
         <div className="mt-auto px-5 py-3">
           <Form className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
             <Form.Group className="input-group has-validation">

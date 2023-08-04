@@ -1,28 +1,79 @@
-import { Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { channelsSelect } from '../slices/channelSlice';
+import { Button, Dropdown, ButtonGroup } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
+import { useState, useContext } from 'react';
+import { channelsSelect, addCurrentId } from '../slices/channelSlice';
+import getModal from './modals/choiceModal.js';
+import AppContext from '../context/app.context';
+
+const renderModal = ({ modalInfo, hideModal }) => {
+  if (!modalInfo.type) {
+    return null;
+  }
+
+  const Component = getModal(modalInfo.type);
+  return <Component modalInfo={modalInfo} onHide={hideModal} item={modalInfo.item} />;
+};
 
 const LeftSideBar = () => {
+  const dispatch = useDispatch();
+  const [modalInfo, setModalInfo] = useState({ type: null, item: null });
+  const { socketApi } = useContext(AppContext);
+  socketApi.subscribeOnUpdChannel();
+  socketApi.subscribeOnNewChannel();
+  const changeChannelHandle = (id) => {
+    dispatch(addCurrentId(id));
+  };
+
+  const hideModal = () => setModalInfo({ type: null });
+  const showModal = (type, item = null) => setModalInfo({ type, item });
+  useSelector((state) => {
+    console.log(state);
+  });
   const activeChannelID = useSelector((state) => state.channels.currentChannelID);
   const channels = useSelector(channelsSelect.selectAll)
-    .map(({ name, id }) => (
-      <li className="nav-item w-100" key={id}>
-        <Button
-          type="button"
-          className="w-100 text-start rounded-0"
-          variant={activeChannelID === id ? 'secondary' : null}
-        >
-          <span className="me-1">{`# ${name}`}</span>
+    .map((channel) => {
+      if (channel.removable) {
+        return (
+          <li className="nav-item w-100" key={channel.id}>
+            <Dropdown as={ButtonGroup} className="d-flex">
+              <Button
+                type="button"
+                onClick={() => changeChannelHandle(channel.id)}
+                className="w-100 text-start rounded-0"
+                variant={activeChannelID === channel.id ? 'secondary' : null}
+              >
+                <span className="me-1">{`# ${channel.name}`}</span>
 
-        </Button>
-      </li>
-    ));
+              </Button>
+              <Dropdown.Toggle split variant={activeChannelID === channel.id ? 'secondary' : null} aria-expanded={activeChannelID === channel.id} id="dropdown-split-basic" className="fex-grow-0" />
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => showModal('delete', channel)} href="#">Удалить</Dropdown.Item>
+                <Dropdown.Item onClick={() => showModal('renaming', channel)} href="#">Переименовать</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </li>
+        );
+      }
+      return (
+        <li className="nav-item w-100" key={channel.id}>
+          <Button
+            type="button"
+            onClick={() => changeChannelHandle(channel.id)}
+            className="w-100 text-start rounded-0"
+            variant={activeChannelID === channel.id ? 'secondary' : null}
+          >
+            <span className="me-1">{`# ${channel.name}`}</span>
+
+          </Button>
+        </li>
+      );
+    });
 
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>Каналы</b>
-        <Button type="button" className="text-primary p-0" variant="group-vertical">
+        <Button type="button" onClick={() => showModal('adding')} className="text-primary p-0" variant="group-vertical">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -39,6 +90,7 @@ const LeftSideBar = () => {
       <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
         {channels}
       </ul>
+      {renderModal({ modalInfo, hideModal })}
     </div>
   );
 };
