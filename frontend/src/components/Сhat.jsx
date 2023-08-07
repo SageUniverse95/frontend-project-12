@@ -41,7 +41,6 @@ const Chat = () => {
     const result = entities[currentIDChannel]?.name;
     return result;
   });
-
   const messages = useSelector(messageSelect.selectAll)
     .filter(({ channelId }) => channelId === currentIDChannel)
     .map(({ body, username, id }) => (

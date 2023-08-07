@@ -8,7 +8,9 @@ import NotFoundPage from '../pages/NotFoundPage.jsx';
 import ChatPage from '../pages/ChatPage.jsx';
 import AppContext from '../context/app.context.js';
 import { addMessage } from '../slices/messageSlice.js';
-import { addChannel, addCurrentId, updateChannel } from '../slices/channelSlice.js';
+import {
+  addChannel, addCurrentId, updateChannel, removeChannel,
+} from '../slices/channelSlice.js';
 
 const socket = io('http://localhost:3000');
 
@@ -34,6 +36,18 @@ const AppProvider = ({ children }) => {
     subscribeOnUpdChannel: () => socket.on('renameChannel', (payload) => {
       const { id } = payload;
       dispatch(updateChannel({ id, changes: payload }));
+    }),
+
+    subscribeOnRemoveChannel: () => socket.on('removeChannel', (payload) => {
+      dispatch(removeChannel(payload));
+      dispatch(addCurrentId(1));
+    }),
+
+    removingChannel: (data) => new Promise((resolve, reject) => {
+      socket.emit('removeChannel', data, (responce) => {
+        if (responce.status === 'ok') resolve(responce.status);
+        reject(new Error('Ошибка удаления канала'));
+      });
     }),
 
     renameChannel: (data) => new Promise((resolve, reject) => {

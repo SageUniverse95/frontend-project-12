@@ -18,17 +18,17 @@ const LeftSideBar = () => {
   const dispatch = useDispatch();
   const [modalInfo, setModalInfo] = useState({ type: null, item: null });
   const { socketApi } = useContext(AppContext);
+  socketApi.subscribeOnRemoveChannel();
   socketApi.subscribeOnUpdChannel();
   socketApi.subscribeOnNewChannel();
+
   const changeChannelHandle = (id) => {
     dispatch(addCurrentId(id));
   };
 
   const hideModal = () => setModalInfo({ type: null });
   const showModal = (type, item = null) => setModalInfo({ type, item });
-  useSelector((state) => {
-    console.log(state);
-  });
+
   const activeChannelID = useSelector((state) => state.channels.currentChannelID);
   const channels = useSelector(channelsSelect.selectAll)
     .map((channel) => {
