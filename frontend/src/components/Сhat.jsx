@@ -1,11 +1,13 @@
 import { Button, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import routes from '../routes';
 import { addChanels, addCurrentId } from '../slices/channelSlice.js';
 import { addMessages, messageSelect } from '../slices/messageSlice.js';
+import getCurrentId from '../selectors/selector.js';
 import AppContext from '../context/app.context';
 
 const getAuthHeader = () => {
@@ -19,21 +21,25 @@ const getAuthHeader = () => {
 };
 
 const Chat = () => {
+  const navigate = useNavigate();
   const { socketApi } = useContext(AppContext);
-  socketApi.subscribeOnMessage();
   const dispatch = useDispatch();
-  const currentIDChannel = useSelector((state) => state.channels.currentChannelID);
+  const currentIDChannel = useSelector(getCurrentId);
+  const inputMessage = useRef();
   useEffect(() => {
     const getData = async () => {
-      const resp = await axios.get(routes.getDataPath(), { headers: getAuthHeader() });
-      if (resp.status === 200) {
+      try {
+        const resp = await axios.get(routes.getDataPath(), { headers: getAuthHeader() });
         const { channels, currentChannelId, messages } = resp.data;
         dispatch(addChanels(channels));
         dispatch(addCurrentId(currentChannelId));
         dispatch(addMessages(messages));
+      } catch (error) {
+        navigate('/login');
       }
     };
     getData();
+    inputMessage.current.focus();
   }, []);
 
   const nameOfChannel = useSelector((state) => {
@@ -55,11 +61,13 @@ const Chat = () => {
     initialValues: {
       message: '',
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       const userName = JSON.parse(localStorage.getItem('userId')).username;
       const data = { body: values.message, channelId: currentIDChannel, username: userName };
       const test = await socketApi.addNewMessage(data);
+      resetForm();
       console.log(test);
+      inputMessage.current.focus();
     },
   });
 
@@ -86,6 +94,7 @@ const Chat = () => {
                 className="border-0 p-0 ps-2"
                 onChange={formik.handleChange}
                 value={formik.values.message}
+                ref={inputMessage}
                 placeholder="Введите сообщение..."
                 name="message"
               />

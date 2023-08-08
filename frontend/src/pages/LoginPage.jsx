@@ -20,7 +20,7 @@ const LoginPage = () => (
                   <span>Нет аккаунта?</span>
                   {' '}
                   {' '}
-                  <a href="#singup">Регистрация</a>
+                  <a href="/singup">Регистрация</a>
                 </div>
               </div>
             </div>

@@ -1,9 +1,9 @@
 import { Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { channelsSelect, addCurrentId } from '../slices/channelSlice';
 import getModal from './modals/choiceModal.js';
-import AppContext from '../context/app.context';
+import getCurrentId from '../selectors/selector.js';
 
 const renderModal = ({ modalInfo, hideModal }) => {
   if (!modalInfo.type) {
@@ -17,10 +17,6 @@ const renderModal = ({ modalInfo, hideModal }) => {
 const LeftSideBar = () => {
   const dispatch = useDispatch();
   const [modalInfo, setModalInfo] = useState({ type: null, item: null });
-  const { socketApi } = useContext(AppContext);
-  socketApi.subscribeOnRemoveChannel();
-  socketApi.subscribeOnUpdChannel();
-  socketApi.subscribeOnNewChannel();
 
   const changeChannelHandle = (id) => {
     dispatch(addCurrentId(id));
@@ -29,7 +25,7 @@ const LeftSideBar = () => {
   const hideModal = () => setModalInfo({ type: null });
   const showModal = (type, item = null) => setModalInfo({ type, item });
 
-  const activeChannelID = useSelector((state) => state.channels.currentChannelID);
+  const activeChannelID = useSelector(getCurrentId);
   const channels = useSelector(channelsSelect.selectAll)
     .map((channel) => {
       if (channel.removable) {

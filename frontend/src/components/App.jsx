@@ -1,10 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { useDispatch } from 'react-redux';
 import LoginPage from '../pages/LoginPage.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
+import SingUpPage from '../pages/singUpPage.jsx';
 import ChatPage from '../pages/ChatPage.jsx';
 import AppContext from '../context/app.context.js';
 import { addMessage } from '../slices/messageSlice.js';
@@ -22,27 +23,31 @@ const AppProvider = ({ children }) => {
     localStorage.removeItem('userId');
     setLoggedIn(false);
   };
-  const socketApi = {
-    subscribeOnMessage: () => socket.on('newMessage', (payload) => {
-      dispatch(addMessage(payload));
-    }),
 
-    subscribeOnNewChannel: () => socket.on('newChannel', (payload) => {
+  useEffect(() => {
+    socket.on('newMessage', (payload) => {
+      dispatch(addMessage(payload));
+    });
+
+    socket.on('newChannel', (payload) => {
       const { id } = payload;
       dispatch(addCurrentId(id));
       dispatch(addChannel(payload));
-    }),
+    });
 
-    subscribeOnUpdChannel: () => socket.on('renameChannel', (payload) => {
+    socket.on('renameChannel', (payload) => {
       const { id } = payload;
       dispatch(updateChannel({ id, changes: payload }));
-    }),
+    });
 
-    subscribeOnRemoveChannel: () => socket.on('removeChannel', (payload) => {
-      dispatch(removeChannel(payload));
+    socket.on('removeChannel', (payload) => {
+      const { id } = payload;
+      dispatch(removeChannel(id));
       dispatch(addCurrentId(1));
-    }),
+    });
+  }, []);
 
+  const socketApi = {
     removingChannel: (data) => new Promise((resolve, reject) => {
       socket.emit('removeChannel', data, (responce) => {
         if (responce.status === 'ok') resolve(responce.status);
@@ -89,6 +94,7 @@ const App = () => (
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<ChatPage />} />
         <Route path="*" element={<NotFoundPage />} />
+        <Route path="singup" element={<SingUpPage />} />
       </Routes>
     </AppProvider>
   </BrowserRouter>
