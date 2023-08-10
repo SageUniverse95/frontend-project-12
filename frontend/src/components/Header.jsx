@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 const Header = ({ children }) => (
   <Navbar className="shadow-sm bg-white" expand="lg">
     <Container>
-      <Navbar.Brand href="/">MyChat</Navbar.Brand>
+      <Navbar.Brand href="/">Hexlet Chat</Navbar.Brand>
       {children}
     </Container>
   </Navbar>
