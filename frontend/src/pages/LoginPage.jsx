@@ -23,7 +23,7 @@ const LoginPage = () => {
                     <span>{t('logInFormText.noAccMessage')}</span>
                     {' '}
                     {' '}
-                    <a href="/singup">{t('logInFormText.singUpMessage')}</a>
+                    <a href="/signup">{t('logInFormText.singUpMessage')}</a>
                   </div>
                 </div>
               </div>
