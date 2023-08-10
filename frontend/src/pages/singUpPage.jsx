@@ -1,5 +1,5 @@
 import Header from '../components/Header';
-import SingUpForm from '../components/singUpForm';
+import SingUpForm from '../components/SignupForm';
 
 const SingUpPage = () => (
   <div className="h-100">

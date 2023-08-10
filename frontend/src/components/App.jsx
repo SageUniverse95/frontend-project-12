@@ -107,7 +107,7 @@ const App = () => (
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<ChatPage />} />
             <Route path="*" element={<NotFoundPage />} />
-            <Route path="/singup" element={<SingUpPage />} />
+            <Route path="/signup" element={<SingUpPage />} />
           </Routes>
         </AppProvider>
       </BrowserRouter>
