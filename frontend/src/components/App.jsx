@@ -1,8 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter, Routes, Route, useNavigate,
+} from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { useDispatch } from 'react-redux';
+import { Provider, ErrorBoundary } from '@rollbar/react';
 import LoginPage from '../pages/LoginPage.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
 import SingUpPage from '../pages/singUpPage.jsx';
@@ -17,11 +21,13 @@ const socket = io('http://localhost:3000');
 
 const AppProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
     localStorage.removeItem('userId');
     setLoggedIn(false);
+    navigate('/login');
   };
 
   useEffect(() => {
@@ -87,18 +93,26 @@ const AppProvider = ({ children }) => {
   );
 };
 
-const App = () => (
-  <BrowserRouter>
-    <AppProvider>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<ChatPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-        <Route path="singup" element={<SingUpPage />} />
-      </Routes>
-    </AppProvider>
-  </BrowserRouter>
+const rollbarConfig = {
+  accessToken: '722e909946084384bf085767391cf095',
+  environment: 'testenv',
+};
 
+const App = () => (
+  <Provider config={rollbarConfig}>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <AppProvider>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<ChatPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+            <Route path="/singup" element={<SingUpPage />} />
+          </Routes>
+        </AppProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
+  </Provider>
 );
 
 export default App;

@@ -1,15 +1,19 @@
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import {
-  useRef, useEffect, useState,
+  useRef, useEffect, useState, useContext,
 } from 'react';
 import routes from '../routes';
+import AppContext from '../context/app.context';
 
 const SingUpForm = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const { logIn } = useContext(AppContext);
   const inputUser = useRef();
   const [isFailSingUp, setSingUpFailed] = useState(false);
   const singUpValidSchema = Yup.object().shape({
@@ -36,12 +40,10 @@ const SingUpForm = () => {
         const { username, password } = values;
         const resp = await axios.post(routes.getCreateNewUserPath(), { username, password });
         const token = resp.data;
-        if (resp.data.token) {
-          localStorage.setItem('userId', JSON.stringify(token));
-          navigate('/');
-        } else {
-          navigate('/login');
-        }
+
+        localStorage.setItem('userId', JSON.stringify(token));
+        logIn();
+        navigate('/');
         resetForm();
       } catch (error) {
         if (error.isAxiosError && error.response.status === 409) {
@@ -61,7 +63,7 @@ const SingUpForm = () => {
   return (
     <Form className="w-50" onSubmit={formik.handleSubmit}>
       <fieldset disabled={formik.isSubmitting}>
-        <h1 className="text-center mb-4">Регистрация</h1>
+        <h1 className="text-center mb-4">{t('singUpFormText.mainTitle')}</h1>
         <Form.Group className="form-floating mb-3">
           <Form.Control
             onChange={formik.handleChange}
@@ -76,7 +78,7 @@ const SingUpForm = () => {
             id="username"
             autoComplete="username"
           />
-          <Form.Label htmlFor="password">Имя пользователя</Form.Label>
+          <Form.Label htmlFor="password">{t('singUpFormText.userName')}</Form.Label>
           {formik.touched.username && formik.errors.username ? (<div className="invalid-tooltip">{formik.errors.username}</div>) : null}
         </Form.Group>
         <Form.Group className="form-floating mb-3">
@@ -93,7 +95,7 @@ const SingUpForm = () => {
             name="password"
             id="password"
           />
-          <Form.Label htmlFor="password">Пароль</Form.Label>
+          <Form.Label htmlFor="password">{t('singUpFormText.passwordMsg')}</Form.Label>
           {formik.touched.password && formik.errors.password ? (<div className="invalid-tooltip">{formik.errors.password}</div>) : null}
         </Form.Group>
         <Form.Group className="form-floating mb-3">
@@ -110,11 +112,11 @@ const SingUpForm = () => {
             name="confirmPassword"
             id="confirmPassword"
           />
-          <Form.Label htmlFor="password">Подтвердите пароль</Form.Label>
+          <Form.Label htmlFor="password">{t('singUpFormText.confirmPassword')}</Form.Label>
           {formik.errors.confirmPassword ? <div className="invalid-tooltip">{formik.errors.confirmPassword}</div> : null}
           {isFailSingUp ? (<div className="invalid-tooltip">Такой пользователь уже существует</div>) : null}
         </Form.Group>
-        <Button className="w-100 mb-3" variant="outline-primary" type="submit">Зарегистрироватся</Button>
+        <Button className="w-100 mb-3" variant="outline-primary" type="submit">{t('buttons.singUpBtn')}</Button>
       </fieldset>
     </Form>
   );

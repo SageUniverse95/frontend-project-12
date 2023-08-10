@@ -1,6 +1,7 @@
 import { Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { channelsSelect, addCurrentId } from '../slices/channelSlice';
 import getModal from './modals/choiceModal.js';
 import getCurrentId from '../selectors/selector.js';
@@ -15,6 +16,7 @@ const renderModal = ({ modalInfo, hideModal }) => {
 };
 
 const LeftSideBar = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [modalInfo, setModalInfo] = useState({ type: null, item: null });
 
@@ -43,8 +45,8 @@ const LeftSideBar = () => {
               </Button>
               <Dropdown.Toggle split variant={activeChannelID === channel.id ? 'secondary' : null} aria-expanded={activeChannelID === channel.id} id="dropdown-split-basic" className="fex-grow-0" />
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => showModal('delete', channel)} href="#">Удалить</Dropdown.Item>
-                <Dropdown.Item onClick={() => showModal('renaming', channel)} href="#">Переименовать</Dropdown.Item>
+                <Dropdown.Item onClick={() => showModal('delete', channel)} href="#">{t('buttons.deleteBtn')}</Dropdown.Item>
+                <Dropdown.Item onClick={() => showModal('renaming', channel)} href="#">{t('buttons.renameBtn')}</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </li>
@@ -68,7 +70,7 @@ const LeftSideBar = () => {
   return (
     <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-        <b>Каналы</b>
+        <b>{t('leftSideBar.titleChannel')}</b>
         <Button type="button" onClick={() => showModal('adding')} className="text-primary p-0" variant="group-vertical">
           <svg
             xmlns="http://www.w3.org/2000/svg"

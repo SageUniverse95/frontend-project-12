@@ -5,6 +5,7 @@ import './index.css';
 import App from './components/App.jsx';
 import reportWebVitals from './reportWebVitals';
 import store from './slices/configStore.js';
+import './i18n.js';
 
 const root = ReactDOM.createRoot(document.getElementById('chat'));
 root.render(

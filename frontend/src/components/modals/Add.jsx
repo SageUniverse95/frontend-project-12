@@ -1,4 +1,6 @@
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import {
   useRef, useEffect, useContext, useState,
 } from 'react';
@@ -11,6 +13,7 @@ import { channelsSelect } from '../../slices/channelSlice.js';
 import AppContext from '../../context/app.context.js';
 
 const Add = (props) => {
+  const { t } = useTranslation();
   const { onHide } = props;
   const { socketApi } = useContext(AppContext);
   const [isValidate, setValidate] = useState(false);
@@ -33,9 +36,15 @@ const Add = (props) => {
     validateOnChange: isValidate,
     validateOnBlur: isValidate,
     onSubmit: async (values) => {
-      setValidate(true);
-      await socketApi.addNewChannel(values);
-      onHide();
+      try {
+        setValidate(true);
+        await socketApi.addNewChannel(values);
+        toast.success(t('notify.addChannel'));
+        onHide();
+      } catch (error) {
+        console.log(error);
+        toast.warn(t('notify.errAddChannel'));
+      }
     },
   });
 
@@ -47,7 +56,7 @@ const Add = (props) => {
   return (
     <Modal show>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modalText.addChannelTitle')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -64,8 +73,8 @@ const Add = (props) => {
             {formik.errors.name ? <div className="invalid-feedback">{formik.errors.name}</div> : null}
           </FormGroup>
           <FormGroup className="d-flex justify-content-end">
-            <Button type="button" onClick={onHide} className="me-2" variant="secondary">Отменить</Button>
-            <Button type="submit" variant="primary">Отправить</Button>
+            <Button type="button" onClick={onHide} className="me-2" variant="secondary">{t('buttons.cancelBtn')}</Button>
+            <Button type="submit" variant="primary">{t('buttons.sendBtn')}</Button>
           </FormGroup>
         </Form>
       </Modal.Body>

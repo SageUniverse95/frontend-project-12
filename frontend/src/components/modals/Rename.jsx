@@ -1,4 +1,6 @@
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import {
   useRef, useEffect, useContext, useState,
 } from 'react';
@@ -11,6 +13,7 @@ import { channelsSelect } from '../../slices/channelSlice.js';
 import AppContext from '../../context/app.context';
 
 const Rename = (props) => {
+  const { t } = useTranslation();
   const { onHide, item } = props;
   const { socketApi } = useContext(AppContext);
   const [isValidate, setValidate] = useState(false);
@@ -41,17 +44,24 @@ const Rename = (props) => {
     validateOnBlur: isValidate,
     validationSchema: renameValidationSchema,
     onSubmit: async (values) => {
-      const { body } = values;
-      await socketApi.renameChannel({ id, name: body });
-      setValidate(true);
-      onHide();
+      try {
+        const { body } = values;
+        await socketApi.renameChannel({ id, name: body });
+        toast.success(t('notify.renameChannel'));
+        setValidate(true);
+        onHide();
+      } catch (error) {
+        console.log(error);
+        setValidate(false);
+        toast.warn('notify.errRenameChannel');
+      }
     },
   });
 
   return (
     <Modal show>
       <Modal.Header closeButton onHide={onHide}>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t('modalText.renameChannelTitle')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
@@ -70,8 +80,8 @@ const Rename = (props) => {
 
           </FormGroup>
           <FormGroup className="d-flex justify-content-end">
-            <Button type="button" onClick={onHide} className="me-2" variant="secondary">Отменить</Button>
-            <Button type="submit" variant="primary">Отправить</Button>
+            <Button type="button" onClick={onHide} className="me-2" variant="secondary">{t('buttons.cancelBtn')}</Button>
+            <Button type="submit" variant="primary">{t('buttons.renameBtn')}</Button>
           </FormGroup>
 
         </form>

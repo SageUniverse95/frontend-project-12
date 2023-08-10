@@ -1,0 +1,59 @@
+{
+  "translation": {
+      "counter": {
+        "count_one": "{{count}} сообщение",
+        "count_few": "{{count}} сообщения",
+        "count_many": "{{count}} сообщений"
+     },
+      "buttons": {
+       "loginBtn": "Войти",
+       "logOutBtn": "Выйти",
+       "singUpBtn": "Зарегистрироваться",
+       "sendBtn": "Отправить",
+       "cancelBtn": "Отменить",
+       "deleteBtn": "Удалить",
+       "renameBtn": "Переименовать"
+     },
+     "logInFormText": {
+        "mainTitle": "Войти",
+        "noAccMessage": "Нет аккаунта?",
+        "singUpMessage": "Регистрация",
+        "nickName": "Ваш ник",
+        "passwordMsg": "Пароль"
+      },
+      "singUpFormText": {
+       "mainTitle": "Регистрация",
+        "userName": "Имя пользователя",
+        "passwordMsg": "Пароль",
+        "confirmPassword": "Подтвердите пароль"
+      },
+      "leftSideBar": {
+        "titleChannel": "Каналы"
+     },
+      "chat": {
+        "inputMessage": "Введите сообщение..."
+     },
+      "modalText": {
+        "addChannelTitle": "Добавить канал",
+        "renameChannelTitle": "Переименовать канал",
+        "deleteChannelTitle": "Удалить канал",
+        "deleteChannelMessage": "Уверены?"
+      },
+      "notFoundPage": {
+        "notFoundMessage": "Страница не найдена",
+        "altMessage": "Но вы можете перейти",
+        "mainPageMessage": "на главную страницу"
+      },
+      "notify": {
+        "addChannel": "Канал создан",
+        "deleteChannel": "Канал удален",
+        "renameChannel": "Канал переименован",
+        "errAddChannel": "Канал не был добавлен",
+        "errDeleteChannel": "Канал не был удален",
+        "errRenameChannel": "Канал не был переименован"
+      }
+    }
+  }
+      
+
+
