@@ -74,17 +74,12 @@ const SingUpForm = () => {
             ref={inputUser}
             onBlur={formik.handleBlur}
             name="username"
-            isInvalid={formik.errors.username && formik.touched.username}
+            isInvalid={isFailSingUp}
             id="username"
             autoComplete="username"
           />
           <Form.Label htmlFor="password">{t('singUpFormText.userName')}</Form.Label>
-          {formik.errors.username ? (
-            <Form.Control.Feedback type="invalid" tooltip placement="rigth">
-              {formik.errors.username}
-            </Form.Control.Feedback>
-          ) : null}
-
+          {formik.touched.username && formik.errors.username ? (<div className="invalid-tooltip">{formik.errors.username}</div>) : null}
         </Form.Group>
         <Form.Group className="form-floating mb-3">
           <Form.Control
