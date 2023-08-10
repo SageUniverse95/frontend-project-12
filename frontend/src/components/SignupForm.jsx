@@ -70,7 +70,7 @@ const SingUpForm = () => {
             value={formik.values.username}
             placeholder="Имя пользователя"
             required
-            className={formik.errors.username ? 'is-invalid' : ''}
+            className={formik.errors.username && formik.touched.username ? 'is-invalid' : ''}
             ref={inputUser}
             onBlur={formik.handleBlur}
             name="username"
