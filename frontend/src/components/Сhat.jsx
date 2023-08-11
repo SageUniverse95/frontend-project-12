@@ -103,7 +103,7 @@ const Chat = () => {
         </div>
         <div className="mt-auto px-5 py-3">
           <Form noValidate className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
-            <Form.Group className={`input-group ${formik.values.message ? '' : 'has-validation'}`}>
+            <Form.Group controlId="messages-box" className={`input-group ${formik.values.message ? '' : 'has-validation'}`}>
               <Form.Control
                 className="border-0 p-0 ps-2"
                 onChange={formik.handleChange}
@@ -113,7 +113,6 @@ const Chat = () => {
                 name="message"
                 aria-label="Новое сообщение"
               />
-              <Form.Label htmlFor="messages-box" />
               <Button className="border-0" type="submit" variant="group-vertical" disabled={!formik.values.message.length}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
