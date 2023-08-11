@@ -6,7 +6,7 @@ import {
 } from 'react';
 import * as Yup from 'yup';
 import {
-  Modal, FormGroup, FormControl, Button,
+  Modal, FormGroup, FormControl, Button, Form,
 } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { channelsSelect } from '../../slices/channelSlice.js';
@@ -65,7 +65,7 @@ const Rename = (props) => {
       </Modal.Header>
 
       <Modal.Body>
-        <form onSubmit={formik.handleSubmit}>
+        <Form onSubmit={formik.handleSubmit}>
           <FormGroup>
             <FormControl
               ref={inputRef}
@@ -73,18 +73,18 @@ const Rename = (props) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.body}
-              data-testid="input-body"
+              id="body"
               name="body"
             />
             {formik.errors.body ? <div className="invalid-feedback">{formik.errors.body}</div> : null}
-
+            <Form.Label className="visually-hidden" htmlFor="body">Имя канала</Form.Label>
           </FormGroup>
           <FormGroup className="d-flex justify-content-end">
             <Button type="button" onClick={onHide} className="me-2" variant="secondary">{t('buttons.cancelBtn')}</Button>
             <Button type="submit" variant="primary">{t('buttons.renameBtn')}</Button>
           </FormGroup>
 
-        </form>
+        </Form>
       </Modal.Body>
     </Modal>
   );

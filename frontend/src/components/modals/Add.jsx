@@ -67,10 +67,12 @@ const Add = (props) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={formik.errors.name ? 'mb-2 is-invalid' : 'mb-2'}
+              id="name"
               value={formik.values.name}
               name="name"
             />
             {formik.errors.name ? <div className="invalid-feedback">{formik.errors.name}</div> : null}
+            <Form.Label className="visually-hidden" htmlFor="name">Имя канала</Form.Label>
           </FormGroup>
           <FormGroup className="d-flex justify-content-end">
             <Button type="button" onClick={onHide} className="me-2" variant="secondary">{t('buttons.cancelBtn')}</Button>

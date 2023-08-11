@@ -10,7 +10,7 @@ import {
 import routes from '../routes';
 import AppContext from '../context/app.context';
 
-const SingUpForm = () => {
+const SignUpForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { logIn } = useContext(AppContext);
@@ -122,4 +122,4 @@ const SingUpForm = () => {
   );
 };
 
-export default SingUpForm;
+export default SignUpForm;

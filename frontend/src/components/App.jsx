@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { Provider, ErrorBoundary } from '@rollbar/react';
 import LoginPage from '../pages/LoginPage.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
-import SingUpPage from '../pages/singUpPage.jsx';
+import SignUpPage from '../pages/singUpPage.jsx';
 import ChatPage from '../pages/ChatPage.jsx';
 import AppContext from '../context/app.context.js';
 import { addMessage } from '../slices/messageSlice.js';
@@ -107,7 +107,7 @@ const App = () => (
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<ChatPage />} />
             <Route path="*" element={<NotFoundPage />} />
-            <Route path="/signup" element={<SingUpPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
           </Routes>
         </AppProvider>
       </BrowserRouter>
