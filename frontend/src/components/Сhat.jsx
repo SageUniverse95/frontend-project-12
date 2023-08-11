@@ -111,6 +111,7 @@ const Chat = () => {
                 ref={inputMessage}
                 placeholder={t('chat.inputMessage')}
                 name="message"
+                aria-label="Новое сообщение"
               />
               <Button type="submit" variant="group-vertical">
                 <svg
