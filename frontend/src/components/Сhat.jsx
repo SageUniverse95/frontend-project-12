@@ -113,6 +113,7 @@ const Chat = () => {
                 name="message"
                 aria-label="Новое сообщение"
               />
+              <Form.Label htmlFor="message" />
               <Button className="border-0" type="submit" variant="group-vertical" disabled={!formik.values.message.length}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
