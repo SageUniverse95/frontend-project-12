@@ -109,6 +109,7 @@ const Chat = () => {
                 onChange={formik.handleChange}
                 value={formik.values.message}
                 ref={inputMessage}
+                id="message"
                 placeholder={t('chat.inputMessage')}
                 name="message"
                 aria-label="Новое сообщение"
