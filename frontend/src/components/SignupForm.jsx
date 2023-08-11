@@ -78,7 +78,7 @@ const SingUpForm = () => {
             id="username"
             autoComplete="username"
           />
-          <Form.Label htmlFor="password">{t('singUpFormText.userName')}</Form.Label>
+          <Form.Label htmlFor="username">{t('singUpFormText.userName')}</Form.Label>
           {formik.touched.username && formik.errors.username ? (<div className="invalid-tooltip">{formik.errors.username}</div>) : null}
         </Form.Group>
         <Form.Group className="form-floating mb-3">
@@ -112,11 +112,11 @@ const SingUpForm = () => {
             name="confirmPassword"
             id="confirmPassword"
           />
-          <Form.Label htmlFor="password">{t('singUpFormText.confirmPassword')}</Form.Label>
+          <Form.Label htmlFor="confirmPassword">{t('singUpFormText.confirmPassword')}</Form.Label>
           {formik.errors.confirmPassword ? <div className="invalid-tooltip">{formik.errors.confirmPassword}</div> : null}
           {isFailSingUp ? (<div className="invalid-tooltip">Такой пользователь уже существует</div>) : null}
         </Form.Group>
-        <Button className="w-100 mb-3" variant="outline-primary" type="submit">{t('buttons.singUpBtn')}</Button>
+        <Button className="w-100 mb-3" variant="outline-primary" type="submit">{t('buttons.signUpBtn')}</Button>
       </fieldset>
     </Form>
   );

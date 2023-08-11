@@ -8,7 +8,7 @@
       "buttons": {
        "loginBtn": "Войти",
        "logOutBtn": "Выйти",
-       "singUpBtn": "Зарегистрироваться",
+       "signUpBtn": "Зарегистрироваться",
        "sendBtn": "Отправить",
        "cancelBtn": "Отменить",
        "deleteBtn": "Удалить",
