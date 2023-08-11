@@ -17,7 +17,7 @@ import {
   addChannel, addCurrentId, updateChannel, removeChannel,
 } from '../slices/channelSlice.js';
 
-const socket = io('http://localhost:3000');
+const socket = io();
 
 const AppProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
