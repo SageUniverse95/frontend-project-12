@@ -43,7 +43,9 @@ const LeftSideBar = () => {
                 <span className="me-1">{`# ${channel.name}`}</span>
 
               </Button>
-              <Dropdown.Toggle split variant={activeChannelID === channel.id ? 'secondary' : null} aria-expanded id="dropdown-split-basic" className="fex-grow-0" />
+              <Dropdown.Toggle split variant={activeChannelID === channel.id ? 'secondary' : null} aria-expanded={activeChannelID === channel.id} id="dropdown-split-basic" className="fex-grow-0">
+                <span className="visually-hidden">Управление каналом</span>
+              </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => showModal('delete', channel)} href="#">{t('buttons.deleteBtn')}</Dropdown.Item>
                 <Dropdown.Item onClick={() => showModal('renaming', channel)} href="#">{t('buttons.renameBtn')}</Dropdown.Item>
