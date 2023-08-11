@@ -22,7 +22,6 @@ const socket = io();
 const AppProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
     localStorage.removeItem('userId');
@@ -31,6 +30,7 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const dispatch = useDispatch();
     socket.on('newMessage', (payload) => {
       dispatch(addMessage(payload));
     });

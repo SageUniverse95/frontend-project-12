@@ -27,19 +27,20 @@ const Chat = () => {
   const russianDictionary = leoProfanity.getDictionary('ru');
   leoProfanity.add(russianDictionary);
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { socketApi, loggedIn } = useContext(AppContext);
   const dispatch = useDispatch();
   const currentIDChannel = useSelector(getCurrentId);
   const inputMessage = useRef();
 
   useEffect(() => {
+    const navigate = useNavigate();
     if (loggedIn) {
       navigate('/');
     }
   }, [loggedIn]);
 
   useEffect(() => {
+    const navigate2 = useNavigate();
     const getData = async () => {
       try {
         const resp = await axios.get(routes.getDataPath(), { headers: getAuthHeader() });
@@ -49,7 +50,7 @@ const Chat = () => {
         dispatch(addMessages(messages));
       } catch (error) {
         console.log(error);
-        navigate('/login');
+        navigate2('/login');
       }
     };
     getData();
