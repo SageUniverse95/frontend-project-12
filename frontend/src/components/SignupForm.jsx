@@ -68,7 +68,7 @@ const SingUpForm = () => {
           <Form.Control
             onChange={formik.handleChange}
             value={formik.values.username}
-            placeholder="Имя пользователя"
+            placeholder="От 3 до 20 символов"
             required
             className={formik.errors.username && formik.touched.username ? 'is-invalid' : ''}
             ref={inputUser}
