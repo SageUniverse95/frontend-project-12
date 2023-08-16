@@ -10,12 +10,12 @@ import {
 } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { channelsSelect } from '../../slices/channelSlice.js';
-import AppContext from '../../context/app.context';
+import SocketApiContext from '../../context/socketApi.Context.js';
 
 const Rename = (props) => {
   const { t } = useTranslation();
   const { onHide, item } = props;
-  const { socketApi } = useContext(AppContext);
+  const { doSocketAction } = useContext(SocketApiContext);
   const [isValidate, setValidate] = useState(false);
   const nameOfChannels = useSelector(channelsSelect.selectAll)
     .map(({ name }) => name);
@@ -46,7 +46,7 @@ const Rename = (props) => {
     onSubmit: async (values) => {
       try {
         const { body } = values;
-        await socketApi.renameChannel({ id, name: body });
+        await doSocketAction({ id, name: body }, 'renameChannel');
         toast.success(t('notify.renameChannel'));
         setValidate(true);
         onHide();

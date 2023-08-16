@@ -5,13 +5,12 @@ import { useEffect, useContext, useRef } from 'react';
 import * as leoProfanity from 'leo-profanity';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import routes from '../routes';
 import { addChanels, addCurrentId } from '../slices/channelSlice.js';
 import { addMessages, messageSelect } from '../slices/messageSlice.js';
 import getCurrentId from '../selectors/selector.js';
-import AppContext from '../context/app.context';
-import Notify from './NotifyTest.jsx';
+import SocketApiContext from '../context/socketApi.Context';
+import Svg from './SvgChat';
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -27,17 +26,10 @@ const Chat = () => {
   const russianDictionary = leoProfanity.getDictionary('ru');
   leoProfanity.add(russianDictionary);
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { socketApi, loggedIn } = useContext(AppContext);
+  const { doSocketAction } = useContext(SocketApiContext);
   const dispatch = useDispatch();
   const currentIDChannel = useSelector(getCurrentId);
   const inputMessage = useRef();
-
-  useEffect(() => {
-    if (loggedIn) {
-      navigate('/');
-    }
-  }, [loggedIn]);
 
   useEffect(() => {
     const getData = async () => {
@@ -49,7 +41,7 @@ const Chat = () => {
         dispatch(addMessages(messages));
       } catch (error) {
         console.log(error);
-        navigate('/login');
+        throw error;
       }
     };
     getData();
@@ -78,7 +70,7 @@ const Chat = () => {
       const userName = JSON.parse(localStorage.getItem('userId')).username;
       const filtredMessage = leoProfanity.clean(values.message);
       const data = { body: filtredMessage, channelId: currentIDChannel, username: userName };
-      const test = await socketApi.addNewMessage(data);
+      const test = await doSocketAction(data, 'newMessage');
       resetForm();
       console.log(test);
       inputMessage.current.focus();
@@ -114,22 +106,13 @@ const Chat = () => {
                 aria-label="Новое сообщение"
               />
               <Button className="border-0" type="submit" variant="group-vertical" disabled={!formik.values.message.length}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 16 16"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                >
-                  <path fillRule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
-                </svg>
+                <Svg />
                 <span className="visually-hidden">{t('buttons.sendBtn')}</span>
               </Button>
             </Form.Group>
           </Form>
         </div>
       </div>
-      <Notify />
     </div>
   );
 };

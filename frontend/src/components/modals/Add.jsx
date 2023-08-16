@@ -10,12 +10,12 @@ import {
 } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { channelsSelect } from '../../slices/channelSlice.js';
-import AppContext from '../../context/app.context.js';
+import SocketApiContext from '../../context/socketApi.Context.js';
 
 const Add = (props) => {
   const { t } = useTranslation();
   const { onHide } = props;
-  const { socketApi } = useContext(AppContext);
+  const { doSocketAction } = useContext(SocketApiContext);
   const [isValidate, setValidate] = useState(false);
   const nameOfChannels = useSelector(channelsSelect.selectAll)
     .map(({ name }) => name);
@@ -38,7 +38,7 @@ const Add = (props) => {
     onSubmit: async (values) => {
       try {
         setValidate(true);
-        await socketApi.addNewChannel(values);
+        await doSocketAction(values, 'newChannel');
         toast.success(t('notify.addChannel'));
         onHide();
       } catch (error) {

@@ -2,7 +2,7 @@ import { Button } from 'react-bootstrap';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
-import LeftSideBar from '../components/leftSideBar';
+import LeftSideBar from '../components/LeftSideBar';
 import Chat from '../components/Сhat';
 import AppContext from '../context/app.context';
 

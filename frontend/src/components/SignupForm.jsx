@@ -3,7 +3,6 @@ import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
 import {
   useRef, useEffect, useState, useContext,
 } from 'react';
@@ -12,7 +11,6 @@ import AppContext from '../context/app.context';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { logIn } = useContext(AppContext);
   const inputUser = useRef();
   const [isFailSingUp, setSingUpFailed] = useState(false);
@@ -43,15 +41,14 @@ const SignUpForm = () => {
 
         localStorage.setItem('userId', JSON.stringify(token));
         logIn();
-        navigate('/');
         resetForm();
       } catch (error) {
         if (error.isAxiosError && error.response.status === 409) {
           console.log(error);
           inputUser.current.focus();
           inputUser.current.select();
-          setSingUpFailed(true);
         }
+        setSingUpFailed(true);
       }
     },
   });

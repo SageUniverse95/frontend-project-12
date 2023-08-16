@@ -5,7 +5,6 @@ import axios from 'axios';
 import {
   useContext, useState, useRef, useEffect,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 import routes from '../routes';
 import AppContext from '../context/app.context.js';
 
@@ -14,7 +13,6 @@ const LoginForm = () => {
   const { t } = useTranslation();
   const { logIn } = useContext(AppContext);
   const inputWithLogin = useRef();
-  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -27,7 +25,6 @@ const LoginForm = () => {
         const token = resp.data;
         localStorage.setItem('userId', JSON.stringify(token));
         logIn();
-        navigate('/');
       } catch (error) {
         formik.setSubmitting(false);
         if (error.isAxiosError && error.response.status === 401) {

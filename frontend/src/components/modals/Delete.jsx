@@ -2,19 +2,19 @@ import { Modal, FormGroup, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { toast } from 'react-toastify';
-import AppContext from '../../context/app.context';
+import SocketApiContext from '../../context/socketApi.Context';
 
 const Delete = (props) => {
   const { t } = useTranslation();
   const { onHide, item } = props;
-  const { socketApi } = useContext(AppContext);
+  const { doSocketAction } = useContext(SocketApiContext);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
       const { id } = item;
       toast.success(t('notify.deleteChannel'));
-      await socketApi.removingChannel({ id });
+      await doSocketAction({ id }, 'removeChannel');
       onHide();
     } catch (error) {
       console.log(error);
