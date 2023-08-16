@@ -39,12 +39,12 @@ const LeftSideBar = () => {
                 type="button"
                 onClick={() => changeChannelHandle(channel.id)}
                 className="w-100 text-start rounded-0"
-                variant={activeChannelID === channel.id ? 'secondary' : null}
+                variant={activeChannelID === channel.id ? 'secondary' : ''}
               >
                 <span className="me-1">{`# ${channel.name}`}</span>
 
               </Button>
-              <Dropdown.Toggle split variant={activeChannelID === channel.id ? 'secondary' : null} aria-expanded={activeChannelID === channel.id} id="dropdown-split-basic" className="fex-grow-0">
+              <Dropdown.Toggle split variant={activeChannelID === channel.id ? 'secondary' : ''} aria-expanded={activeChannelID === channel.id} id="dropdown-split-basic" className="fex-grow-0">
                 <span className="visually-hidden">Управление каналом</span>
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -61,7 +61,7 @@ const LeftSideBar = () => {
             type="button"
             onClick={() => changeChannelHandle(channel.id)}
             className="w-100 text-start rounded-0"
-            variant={activeChannelID === channel.id ? 'secondary' : null}
+            variant={activeChannelID === channel.id ? 'secondary' : ''}
           >
             <span className="me-1">{`# ${channel.name}`}</span>
 

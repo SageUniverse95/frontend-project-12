@@ -11,15 +11,15 @@ import LoginPage from '../pages/LoginPage.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
 import SignUpPage from '../pages/SingUpPage.jsx';
 import ChatPage from '../pages/ChatPage.jsx';
-import AuthContext from '../context/app.context.js';
+import AuthContext from '../context/auth.context.js';
 import PrivateRoute from '../router/PrivateRouter.jsx';
 
 const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
-    localStorage.removeItem('userId');
     setLoggedIn(false);
+    localStorage.removeItem('userId');
   };
 
   return (

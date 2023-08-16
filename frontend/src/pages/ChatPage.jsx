@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import LeftSideBar from '../components/LeftSideBar';
 import Chat from '../components/Сhat';
-import AppContext from '../context/app.context';
+import AppContext from '../context/auth.context.js';
 
 const ChatPage = () => {
   const { logOut } = useContext(AppContext);

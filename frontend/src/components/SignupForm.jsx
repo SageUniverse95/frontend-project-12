@@ -1,17 +1,19 @@
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import * as Yup from 'yup';
 import {
   useRef, useEffect, useState, useContext,
 } from 'react';
 import routes from '../routes';
-import AppContext from '../context/app.context';
+import AppContext from '../context/auth.context.js';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
   const { logIn } = useContext(AppContext);
+  const navigate = useNavigate();
   const inputUser = useRef();
   const [isFailSingUp, setSingUpFailed] = useState(false);
   const singUpValidSchema = Yup.object().shape({
@@ -41,6 +43,7 @@ const SignUpForm = () => {
 
         localStorage.setItem('userId', JSON.stringify(token));
         logIn();
+        navigate('/');
         resetForm();
       } catch (error) {
         if (error.isAxiosError && error.response.status === 409) {
