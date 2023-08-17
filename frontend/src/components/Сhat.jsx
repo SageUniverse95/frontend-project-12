@@ -3,48 +3,21 @@ import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useContext, useRef } from 'react';
 import * as leoProfanity from 'leo-profanity';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import routes from '../routes';
-import { addChanels, addCurrentId } from '../slices/channelSlice.js';
-import { addMessages, messageSelect } from '../slices/messageSlice.js';
+import { useSelector } from 'react-redux';
+import { messageSelect } from '../slices/messageSlice.js';
 import getCurrentId from '../selectors/selector.js';
 import SocketApiContext from '../context/socketApi.Context';
 import Svg from './SvgChat';
-
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
-
-  if (userId && userId.token) {
-    return { Authorization: `Bearer ${userId.token}` };
-  }
-
-  return {};
-};
 
 const Chat = () => {
   const russianDictionary = leoProfanity.getDictionary('ru');
   leoProfanity.add(russianDictionary);
   const { t } = useTranslation();
   const { doSocketAction } = useContext(SocketApiContext);
-  const dispatch = useDispatch();
   const currentIDChannel = useSelector(getCurrentId);
   const inputMessage = useRef();
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const resp = await axios.get(routes.getDataPath(), { headers: getAuthHeader() });
-        const { channels, currentChannelId, messages } = resp.data;
-        dispatch(addChanels(channels));
-        dispatch(addCurrentId(currentChannelId));
-        dispatch(addMessages(messages));
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    };
-    getData();
     inputMessage.current.focus();
   }, []);
 

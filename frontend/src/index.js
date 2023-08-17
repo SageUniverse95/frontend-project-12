@@ -1,7 +1,10 @@
 import React from 'react';
 import { Provider, useDispatch } from 'react-redux';
+import i18next from 'i18next';
+import { initReactI18next } from 'react-i18next';
 import { io } from 'socket.io-client';
 import ReactDOM from 'react-dom/client';
+import resources from './locales/resources.js';
 import SocketApiContext from './context/socketApi.Context.js';
 import { addMessage } from './slices/messageSlice.js';
 import {
@@ -9,7 +12,6 @@ import {
 } from './slices/channelSlice.js';
 import App from './components/App.jsx';
 import store from './slices/configStore.js';
-import './i18n.js';
 
 const SocketProvider = ({ children, socket }) => {
   const dispatch = useDispatch();
@@ -54,6 +56,16 @@ const SocketProvider = ({ children, socket }) => {
 const runApp = async () => {
   const root = ReactDOM.createRoot(document.getElementById('chat'));
   const socket = io();
+  await i18next
+    .use(initReactI18next)
+    .init({
+      resources,
+      interpolation: {
+        escapeValue: false,
+      },
+      fallbackLng: 'ru',
+      debug: true,
+    });
 
   root.render(
     <React.StrictMode>

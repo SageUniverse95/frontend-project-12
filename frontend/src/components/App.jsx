@@ -7,6 +7,8 @@ import {
 
 import { Provider, ErrorBoundary } from '@rollbar/react';
 import { ToastContainer } from 'react-toastify';
+import axios from 'axios';
+import routes from '../routes.js';
 import LoginPage from '../pages/LoginPage.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
 import SignUpPage from '../pages/SingUpPage.jsx';
@@ -15,17 +17,24 @@ import AuthContext from '../context/auth.context.js';
 import PrivateRoute from '../router/PrivateRouter.jsx';
 
 const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const isLogin = !!localStorage.getItem('userId');
+  const [loggedIn, setLoggedIn] = useState(isLogin);
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
     setLoggedIn(false);
     localStorage.removeItem('userId');
   };
 
+  const checkAuth = async (userData) => {
+    const resp = await axios.post(routes.getLoginPath(), userData);
+    const token = resp.data;
+    localStorage.setItem('userId', JSON.stringify(token));
+  };
+
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <AuthContext.Provider value={{
-      loggedIn, logIn, logOut,
+      loggedIn, logIn, logOut, checkAuth,
     }}
     >
       {children}
@@ -34,7 +43,7 @@ const AuthProvider = ({ children }) => {
 };
 
 const rollbarConfig = {
-  accessToken: '722e909946084384bf085767391cf095',
+  accessToken: process.env.SECRET_KEY,
   environment: 'testenv',
 };
 
