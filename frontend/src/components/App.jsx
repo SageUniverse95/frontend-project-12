@@ -11,7 +11,7 @@ import axios from 'axios';
 import routes from '../routes.js';
 import LoginPage from '../pages/LoginPage.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
-import SingUpPage from '../pages/SingUpPage.jsx';
+import SignUpPage from '../pages/SignUpPage.jsx';
 import ChatPage from '../pages/ChatPage.jsx';
 import AuthContext from '../context/auth.context.js';
 import PrivateRoute from '../router/PrivateRouter.jsx';
@@ -58,7 +58,7 @@ const App = () => (
             </Route>
             <Route path="/login" element={<LoginPage />} />
             <Route path="*" element={<NotFoundPage />} />
-            <Route path="/signup" element={<SingUpPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
