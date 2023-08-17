@@ -23,7 +23,7 @@ const LoginForm = () => {
       setAuthFailed(false);
       try {
         logIn();
-        await checkAuth(values);
+        await checkAuth(values, 'login');
         navigate('/');
       } catch (error) {
         formik.setSubmitting(false);

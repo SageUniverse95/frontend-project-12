@@ -25,10 +25,18 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('userId');
   };
 
-  const checkAuth = async (userData) => {
-    const resp = await axios.post(routes.getLoginPath(), userData);
-    const token = resp.data;
-    localStorage.setItem('userId', JSON.stringify(token));
+  const checkAuth = async (userData, typeAction) => {
+    if (typeAction === 'login') {
+      const resp = await axios.post(routes.getLoginPath(), userData);
+      const token = resp.data;
+      localStorage.setItem('userId', JSON.stringify(token));
+    }
+    if (typeAction === 'signup') {
+      const { username, password } = userData;
+      const resp = await axios.post(routes.getCreateNewUserPath(), { username, password });
+      const token = resp.data;
+      localStorage.setItem('userId', JSON.stringify(token));
+    }
   };
 
   return (
