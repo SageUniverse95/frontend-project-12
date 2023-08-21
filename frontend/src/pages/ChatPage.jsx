@@ -10,19 +10,16 @@ import Header from '../components/Header';
 import LeftSideBar from '../components/LeftSideBar';
 import Chat from '../components/Сhat';
 import AppContext from '../context/authContext.js';
-import NetworkContext from '../context/networkContextApi.js';
 
 const getAuthHeader = (token) => {
   if (token) {
     return { Authorization: `Bearer ${token}` };
   }
-
   return {};
 };
 
 const ChatPage = () => {
-  const { logOut } = useContext(AppContext);
-  const { token } = useContext(NetworkContext);
+  const { logOut, token } = useContext(AppContext);
   const { t } = useTranslation();
   const dispatch = useDispatch();
 

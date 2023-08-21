@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Provider, useDispatch } from 'react-redux';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import axios from 'axios';
 import { io } from 'socket.io-client';
 import ReactDOM from 'react-dom/client';
-import NetworkContext from './context/networkContextApi.js';
-import routes from './routes.js';
 import resources from './locales/resources.js';
 import SocketApiContext from './context/socketApiContext.js';
 import { addMessage } from './slices/messageSlice.js';
@@ -56,29 +53,6 @@ const SocketProvider = ({ children, socket }) => {
   );
 };
 
-const NetworkProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
-  const checkLoginAuth = async (userData) => {
-    const resp = await axios.post(routes.getLoginPath(), userData);
-    localStorage.setItem('userId', JSON.stringify(resp.data));
-    setToken(resp.data.token);
-  };
-
-  const checkSignupAuth = async (userData) => {
-    const { username, password } = userData;
-    const resp = await axios.post(routes.getCreateNewUserPath(), { username, password });
-    localStorage.setItem('userId', JSON.stringify(resp.data));
-    setToken(resp.data.token);
-  };
-
-  return (
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <NetworkContext.Provider value={{ token, checkLoginAuth, checkSignupAuth }}>
-      {children}
-    </NetworkContext.Provider>
-  );
-};
-
 const runApp = async () => {
   const root = ReactDOM.createRoot(document.getElementById('chat'));
   const socket = io();
@@ -97,9 +71,7 @@ const runApp = async () => {
     <React.StrictMode>
       <Provider store={store}>
         <SocketProvider socket={socket}>
-          <NetworkProvider>
-            <App />
-          </NetworkProvider>
+          <App />
         </SocketProvider>
       </Provider>
     </React.StrictMode>,

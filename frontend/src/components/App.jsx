@@ -17,8 +17,8 @@ import PrivateRoute from '../router/PrivateRouter.jsx';
 const AuthProvider = ({ children }) => {
   const isLogin = !!localStorage.getItem('userId');
   const [loggedIn, setLoggedIn] = useState(isLogin);
+  const [token, setToken] = useState(null);
   const currentUserName = JSON.parse(localStorage.getItem('userId'))?.username;
-  console.log(localStorage.getItem('userId'));
   const logIn = () => setLoggedIn(true);
 
   const logOut = () => {
@@ -29,7 +29,7 @@ const AuthProvider = ({ children }) => {
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <AuthContext.Provider value={{
-      loggedIn, logIn, logOut, currentUserName,
+      loggedIn, logIn, logOut, currentUserName, token, setToken,
     }}
     >
       {children}

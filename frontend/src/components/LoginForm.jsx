@@ -2,19 +2,19 @@ import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import {
   useContext, useState, useRef, useEffect,
 } from 'react';
+import routes from '../routes.js';
 import AuthContext from '../context/authContext.js';
-import NetworkContext from '../context/networkContextApi.js';
 
 const LoginForm = () => {
   const [isFailAuth, setAuthFailed] = useState(false);
-  const { checkLoginAuth } = useContext(NetworkContext);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { logIn } = useContext(AuthContext);
+  const { logIn, setToken } = useContext(AuthContext);
   const inputWithLogin = useRef();
   const formik = useFormik({
     initialValues: {
@@ -25,7 +25,9 @@ const LoginForm = () => {
       setAuthFailed(false);
       try {
         logIn();
-        await checkLoginAuth(values);
+        const resp = await axios.post(routes.getLoginPath(), values);
+        localStorage.setItem('userId', JSON.stringify(resp.data));
+        setToken(resp.data.token);
         navigate('/');
       } catch (error) {
         formik.setSubmitting(false);

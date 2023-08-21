@@ -1,18 +1,18 @@
 import { useFormik } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import {
   useRef, useEffect, useState, useContext,
 } from 'react';
+import routes from '../routes.js';
 import AppContext from '../context/authContext.js';
-import NetworkContext from '../context/networkContextApi.js';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
-  const { logIn } = useContext(AppContext);
-  const { checkSignupAuth } = useContext(NetworkContext);
+  const { logIn, setToken } = useContext(AppContext);
   const navigate = useNavigate();
   const inputUser = useRef();
   const [isFailSingUp, setSingUpFailed] = useState(false);
@@ -37,7 +37,10 @@ const SignUpForm = () => {
     onSubmit: async (values, { resetForm }) => {
       setSingUpFailed(false);
       try {
-        await checkSignupAuth(values);
+        const { username, password } = values;
+        const resp = await axios.post(routes.getCreateNewUserPath(), { username, password });
+        localStorage.setItem('userId', JSON.stringify(resp.data));
+        setToken(resp.data.token);
         logIn();
         navigate('/');
         resetForm();
