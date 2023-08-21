@@ -2,7 +2,7 @@ import { Modal, FormGroup, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { toast } from 'react-toastify';
-import SocketApiContext from '../../context/socketApi.Context';
+import SocketApiContext from '../../context/socketApiContext';
 
 const Delete = (props) => {
   const { t } = useTranslation();

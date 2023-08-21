@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { channelsSelect, addCurrentId } from '../slices/channelSlice';
 import getModal from './modals/choiceModal.js';
 import getCurrentId from '../selectors/selector.js';
-import Svg from './SvgLeftSideBar';
+import Svg from './svg/SvgLeftSideBar';
 
 const renderModal = ({ modalInfo, hideModal }) => {
   if (!modalInfo.type) {

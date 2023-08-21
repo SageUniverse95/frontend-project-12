@@ -7,42 +7,29 @@ import {
 
 import { Provider, ErrorBoundary } from '@rollbar/react';
 import { ToastContainer } from 'react-toastify';
-import axios from 'axios';
-import routes from '../routes.js';
 import LoginPage from '../pages/LoginPage.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
 import SignUpPage from '../pages/SignUpPage.jsx';
 import ChatPage from '../pages/ChatPage.jsx';
-import AuthContext from '../context/auth.context.js';
+import AuthContext from '../context/authContext.js';
 import PrivateRoute from '../router/PrivateRouter.jsx';
 
 const AuthProvider = ({ children }) => {
   const isLogin = !!localStorage.getItem('userId');
   const [loggedIn, setLoggedIn] = useState(isLogin);
+  const currentUserName = JSON.parse(localStorage.getItem('userId'))?.username;
+  console.log(localStorage.getItem('userId'));
   const logIn = () => setLoggedIn(true);
+
   const logOut = () => {
     setLoggedIn(false);
     localStorage.removeItem('userId');
   };
 
-  const checkAuth = async (userData, typeAction) => {
-    if (typeAction === 'login') {
-      const resp = await axios.post(routes.getLoginPath(), userData);
-      const token = resp.data;
-      localStorage.setItem('userId', JSON.stringify(token));
-    }
-    if (typeAction === 'signup') {
-      const { username, password } = userData;
-      const resp = await axios.post(routes.getCreateNewUserPath(), { username, password });
-      const token = resp.data;
-      localStorage.setItem('userId', JSON.stringify(token));
-    }
-  };
-
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <AuthContext.Provider value={{
-      loggedIn, logIn, logOut, checkAuth,
+      loggedIn, logIn, logOut, currentUserName,
     }}
     >
       {children}

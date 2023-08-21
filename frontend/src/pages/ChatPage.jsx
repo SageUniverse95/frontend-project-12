@@ -9,13 +9,12 @@ import { addMessages } from '../slices/messageSlice.js';
 import Header from '../components/Header';
 import LeftSideBar from '../components/LeftSideBar';
 import Chat from '../components/Сhat';
-import AppContext from '../context/auth.context.js';
+import AppContext from '../context/authContext.js';
+import NetworkContext from '../context/networkContextApi.js';
 
-const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
-
-  if (userId && userId.token) {
-    return { Authorization: `Bearer ${userId.token}` };
+const getAuthHeader = (token) => {
+  if (token) {
+    return { Authorization: `Bearer ${token}` };
   }
 
   return {};
@@ -23,19 +22,20 @@ const getAuthHeader = () => {
 
 const ChatPage = () => {
   const { logOut } = useContext(AppContext);
+  const { token } = useContext(NetworkContext);
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const resp = await axios.get(routes.getDataPath(), { headers: getAuthHeader() });
+        const resp = await axios.get(routes.getDataPath(), { headers: getAuthHeader(token) });
         const { channels, currentChannelId, messages } = resp.data;
         dispatch(addChanels(channels));
         dispatch(addCurrentId(currentChannelId));
         dispatch(addMessages(messages));
       } catch (error) {
-        console.log(error);
+        logOut();
         throw error;
       }
     };

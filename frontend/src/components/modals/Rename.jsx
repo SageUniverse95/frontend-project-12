@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { channelsSelect } from '../../slices/channelSlice.js';
-import SocketApiContext from '../../context/socketApi.Context.js';
+import SocketApiContext from '../../context/socketApiContext.js';
 
 const Rename = (props) => {
   const { t } = useTranslation();

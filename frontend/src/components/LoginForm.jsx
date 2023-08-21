@@ -6,13 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import {
   useContext, useState, useRef, useEffect,
 } from 'react';
-import AuthContext from '../context/auth.context.js';
+import AuthContext from '../context/authContext.js';
+import NetworkContext from '../context/networkContextApi.js';
 
 const LoginForm = () => {
   const [isFailAuth, setAuthFailed] = useState(false);
+  const { checkLoginAuth } = useContext(NetworkContext);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { logIn, checkAuth } = useContext(AuthContext);
+  const { logIn } = useContext(AuthContext);
   const inputWithLogin = useRef();
   const formik = useFormik({
     initialValues: {
@@ -23,7 +25,7 @@ const LoginForm = () => {
       setAuthFailed(false);
       try {
         logIn();
-        await checkAuth(values, 'login');
+        await checkLoginAuth(values);
         navigate('/');
       } catch (error) {
         formik.setSubmitting(false);

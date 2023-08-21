@@ -6,11 +6,13 @@ import * as Yup from 'yup';
 import {
   useRef, useEffect, useState, useContext,
 } from 'react';
-import AppContext from '../context/auth.context.js';
+import AppContext from '../context/authContext.js';
+import NetworkContext from '../context/networkContextApi.js';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
-  const { logIn, checkAuth } = useContext(AppContext);
+  const { logIn } = useContext(AppContext);
+  const { checkSignupAuth } = useContext(NetworkContext);
   const navigate = useNavigate();
   const inputUser = useRef();
   const [isFailSingUp, setSingUpFailed] = useState(false);
@@ -35,13 +37,12 @@ const SignUpForm = () => {
     onSubmit: async (values, { resetForm }) => {
       setSingUpFailed(false);
       try {
-        await checkAuth(values, 'signup');
+        await checkSignupAuth(values);
         logIn();
         navigate('/');
         resetForm();
       } catch (error) {
         if (error.isAxiosError && error.response.status === 409) {
-          console.log(error);
           inputUser.current.focus();
           inputUser.current.select();
         }

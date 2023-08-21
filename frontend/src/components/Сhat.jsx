@@ -6,14 +6,16 @@ import * as leoProfanity from 'leo-profanity';
 import { useSelector } from 'react-redux';
 import { messageSelect } from '../slices/messageSlice.js';
 import getCurrentId from '../selectors/selector.js';
-import SocketApiContext from '../context/socketApi.Context';
-import Svg from './SvgChat';
+import AuthContext from '../context/authContext.js';
+import SocketApiContext from '../context/socketApiContext.js';
+import Svg from './svg/SvgChat.jsx';
 
 const Chat = () => {
   const russianDictionary = leoProfanity.getDictionary('ru');
   leoProfanity.add(russianDictionary);
   const { t } = useTranslation();
   const { doSocketAction } = useContext(SocketApiContext);
+  const { currentUserName } = useContext(AuthContext);
   const currentIDChannel = useSelector(getCurrentId);
   const inputMessage = useRef();
 
@@ -40,12 +42,11 @@ const Chat = () => {
       message: '',
     },
     onSubmit: async (values, { resetForm }) => {
-      const userName = JSON.parse(localStorage.getItem('userId')).username;
+      /* const userName = JSON.parse(localStorage.getItem('userId')).username; */
       const filtredMessage = leoProfanity.clean(values.message);
-      const data = { body: filtredMessage, channelId: currentIDChannel, username: userName };
-      const test = await doSocketAction(data, 'newMessage');
+      const data = { body: filtredMessage, channelId: currentIDChannel, username: currentUserName };
+      await doSocketAction(data, 'newMessage');
       resetForm();
-      console.log(test);
       inputMessage.current.focus();
     },
   });

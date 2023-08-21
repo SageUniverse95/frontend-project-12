@@ -13,7 +13,6 @@ const NotFoundPage = () => {
           <p className="text-muted">
             {t('notFoundPage.altMessage')}
             {' '}
-            {' '}
             <a href="/">{t('notFoundPage.mainPageMessage')}</a>
           </p>
         </div>
