@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import routes from '../routes.js';
+import routes from '../routesAxios.js';
 import { addChanels, addCurrentId } from '../slices/channelSlice.js';
 import { addMessages } from '../slices/messageSlice.js';
 import Header from '../components/Header';

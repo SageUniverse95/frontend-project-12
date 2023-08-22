@@ -7,12 +7,12 @@ import * as Yup from 'yup';
 import {
   useRef, useEffect, useState, useContext,
 } from 'react';
-import routes from '../routes.js';
+import routes from '../routesAxios.js';
 import AppContext from '../context/authContext.js';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
-  const { logIn, setToken } = useContext(AppContext);
+  const { logIn } = useContext(AppContext);
   const navigate = useNavigate();
   const inputUser = useRef();
   const [isFailSingUp, setSingUpFailed] = useState(false);
@@ -39,9 +39,7 @@ const SignUpForm = () => {
       try {
         const { username, password } = values;
         const resp = await axios.post(routes.getCreateNewUserPath(), { username, password });
-        localStorage.setItem('userId', JSON.stringify(resp.data));
-        setToken(resp.data.token);
-        logIn();
+        logIn(resp.data);
         navigate('/');
         resetForm();
       } catch (error) {

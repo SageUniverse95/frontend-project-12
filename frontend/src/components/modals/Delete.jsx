@@ -17,8 +17,8 @@ const Delete = (props) => {
       await doSocketAction({ id }, 'removeChannel');
       onHide();
     } catch (error) {
-      console.log(error);
       toast.warn('notify.errDeleteChannel');
+      throw error;
     }
   };
   return (

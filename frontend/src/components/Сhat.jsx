@@ -42,7 +42,6 @@ const Chat = () => {
       message: '',
     },
     onSubmit: async (values, { resetForm }) => {
-      /* const userName = JSON.parse(localStorage.getItem('userId')).username; */
       const filtredMessage = leoProfanity.clean(values.message);
       const data = { body: filtredMessage, channelId: currentIDChannel, username: currentUserName };
       await doSocketAction(data, 'newMessage');

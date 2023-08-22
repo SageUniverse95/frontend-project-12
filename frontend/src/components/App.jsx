@@ -2,24 +2,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import {
-  BrowserRouter, Routes, Route,
+  BrowserRouter, Routes,
 } from 'react-router-dom';
-
 import { Provider, ErrorBoundary } from '@rollbar/react';
 import { ToastContainer } from 'react-toastify';
-import LoginPage from '../pages/LoginPage.jsx';
-import NotFoundPage from '../pages/NotFoundPage.jsx';
-import SignUpPage from '../pages/SignUpPage.jsx';
-import ChatPage from '../pages/ChatPage.jsx';
 import AuthContext from '../context/authContext.js';
-import PrivateRoute from '../router/PrivateRouter.jsx';
+import routes from '../router/Routers.jsx';
 
 const AuthProvider = ({ children }) => {
   const isLogin = !!localStorage.getItem('userId');
   const [loggedIn, setLoggedIn] = useState(isLogin);
   const [token, setToken] = useState(null);
   const currentUserName = JSON.parse(localStorage.getItem('userId'))?.username;
-  const logIn = () => setLoggedIn(true);
+  const logIn = (data) => {
+    localStorage.setItem('userId', JSON.stringify(data));
+    setToken(data.token);
+    setLoggedIn(true);
+  };
 
   const logOut = () => {
     setLoggedIn(false);
@@ -29,7 +28,7 @@ const AuthProvider = ({ children }) => {
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <AuthContext.Provider value={{
-      loggedIn, logIn, logOut, currentUserName, token, setToken,
+      loggedIn, logIn, logOut, currentUserName, token,
     }}
     >
       {children}
@@ -48,12 +47,10 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route element={<PrivateRoute />}>
-              <Route path="/" element={<ChatPage />} />
-            </Route>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            {routes.getRouteToChatPage()}
+            {routes.getRouteToLoginPage()}
+            {routes.getRouteToNotFoundPage()}
+            {routes.getRouteToSignupPage()}
           </Routes>
         </AuthProvider>
       </BrowserRouter>

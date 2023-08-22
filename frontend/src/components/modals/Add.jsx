@@ -42,8 +42,8 @@ const Add = (props) => {
         toast.success(t('notify.addChannel'));
         onHide();
       } catch (error) {
-        console.log(error);
         toast.warn(t('notify.errAddChannel'));
+        throw error;
       }
     },
   });

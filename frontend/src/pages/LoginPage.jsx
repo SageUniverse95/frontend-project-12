@@ -22,7 +22,6 @@ const LoginPage = () => {
                   <div className="text-center">
                     <span>{t('logInFormText.noAccMessage')}</span>
                     {' '}
-                    {' '}
                     <a href="/signup">{t('logInFormText.singUpMessage')}</a>
                   </div>
                 </div>

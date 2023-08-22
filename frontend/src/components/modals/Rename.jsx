@@ -51,9 +51,9 @@ const Rename = (props) => {
         setValidate(true);
         onHide();
       } catch (error) {
-        console.log(error);
         setValidate(false);
         toast.warn('notify.errRenameChannel');
+        throw error;
       }
     },
   });

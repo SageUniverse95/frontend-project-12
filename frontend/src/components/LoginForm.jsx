@@ -7,14 +7,14 @@ import axios from 'axios';
 import {
   useContext, useState, useRef, useEffect,
 } from 'react';
-import routes from '../routes.js';
+import routes from '../routesAxios.js';
 import AuthContext from '../context/authContext.js';
 
 const LoginForm = () => {
   const [isFailAuth, setAuthFailed] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { logIn, setToken } = useContext(AuthContext);
+  const { logIn } = useContext(AuthContext);
   const inputWithLogin = useRef();
   const formik = useFormik({
     initialValues: {
@@ -24,10 +24,8 @@ const LoginForm = () => {
     onSubmit: async (values) => {
       setAuthFailed(false);
       try {
-        logIn();
         const resp = await axios.post(routes.getLoginPath(), values);
-        localStorage.setItem('userId', JSON.stringify(resp.data));
-        setToken(resp.data.token);
+        logIn(resp.data);
         navigate('/');
       } catch (error) {
         formik.setSubmitting(false);
