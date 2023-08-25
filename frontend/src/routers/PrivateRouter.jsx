@@ -3,9 +3,9 @@ import { useContext } from 'react';
 import AuthContext from '../context/authContext.js';
 
 const PrivateRoute = () => {
-  const { loggedIn } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   return (
-    loggedIn ? <Outlet /> : <Navigate to="/login" />
+    user.loggedIn ? <Outlet /> : <Navigate to="/login" />
   );
 };
 

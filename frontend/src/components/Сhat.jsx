@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Button, Form } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -15,9 +16,10 @@ const Chat = () => {
   leoProfanity.add(russianDictionary);
   const { t } = useTranslation();
   const { doSocketAction } = useContext(SocketApiContext);
-  const { currentUserName } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const currentIDChannel = useSelector(getCurrentId);
   const inputMessage = useRef();
+  const container = useRef();
 
   useEffect(() => {
     inputMessage.current.focus();
@@ -37,13 +39,18 @@ const Chat = () => {
         {body}
       </div>
     ));
+
+  useEffect(() => {
+    container.current.scrollTop = container.current.scrollHeight;
+  }, [messages]);
+
   const formik = useFormik({
     initialValues: {
       message: '',
     },
     onSubmit: async (values, { resetForm }) => {
       const filtredMessage = leoProfanity.clean(values.message);
-      const data = { body: filtredMessage, channelId: currentIDChannel, username: currentUserName };
+      const data = { body: filtredMessage, channelId: currentIDChannel, username: user.currentUserName };
       await doSocketAction(data, 'newMessage');
       resetForm();
       inputMessage.current.focus();
@@ -63,7 +70,7 @@ const Chat = () => {
           </p>
           <span className="text-muted">{t('counter.count', { count: messages.length })}</span>
         </div>
-        <div id="messages-box" className="chat-messages overflow-auto px-5 ">
+        <div id="messages-box" ref={container} className="chat-messages overflow-auto px-5 ">
           {messages || null}
         </div>
         <div className="mt-auto px-5 py-3">

@@ -7,7 +7,7 @@ import axios from 'axios';
 import {
   useContext, useState, useRef, useEffect,
 } from 'react';
-import routes from '../routesAxios.js';
+import routesPath from '../routesPath.js';
 import AuthContext from '../context/authContext.js';
 
 const LoginForm = () => {
@@ -24,7 +24,7 @@ const LoginForm = () => {
     onSubmit: async (values) => {
       setAuthFailed(false);
       try {
-        const resp = await axios.post(routes.getLoginPath(), values);
+        const resp = await axios.post(routesPath.getLoginPath(), values);
         logIn(resp.data);
         navigate('/');
       } catch (error) {
