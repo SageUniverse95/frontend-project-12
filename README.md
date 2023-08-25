@@ -15,11 +15,13 @@ The application has the following functionality:
 
 
 ### Preview
-
+###### Chat page
 ![Chat page](frontend/assets/chat.png "chat page")
 
+###### Login page
 ![Login page](frontend/assets/login.png "chat")
 
+###### Signup page
 ![Signup page](frontend/assets/signup.png "chat")
 
 #### Usage
