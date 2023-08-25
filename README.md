@@ -5,12 +5,22 @@
 
 This is a simplified slack application implemented with React.
 
+### About
+
 The application has the following functionality:
 
 * Create/delete/rename/channels (CRUD)
 * Sending messages (socket io)
 * Registration of new users
 
+
+### Preview
+
+![Chat page](frontend/assets/chat.png "chat page")
+
+![Login page](frontend/assets/login.png "chat")
+
+![Signup page](frontend/assets/signup.png "chat")
 
 #### Usage
 
